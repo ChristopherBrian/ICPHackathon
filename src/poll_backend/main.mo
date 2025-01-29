@@ -8,11 +8,9 @@ import Iter "mo:base/Iter";
 actor {
   type SessionId = Text;
   type UserId = Text;
-  type Color = Nat16;
-  type DrawingData = [Color];
 
-  var sessions: HashMap.HashMap<SessionId, HashMap.HashMap<UserId, DrawingData>> = 
-    HashMap.HashMap<SessionId, HashMap.HashMap<UserId, DrawingData>>(
+  var sessions: HashMap.HashMap<SessionId, HashMap.HashMap<UserId, Bool>> = 
+    HashMap.HashMap<SessionId, HashMap.HashMap<UserId, Bool>>(
       10, 
       Text.equal, 
       Text.hash
@@ -20,9 +18,9 @@ actor {
 
   public func createSession(): async SessionId {
     let sessionId = generateSessionId();
-    let userMap = HashMap.HashMap<UserId, DrawingData>(
+    let userMap = HashMap.HashMap<UserId, Bool>(
       10, 
-      Text.equal, 
+      Text.equal,
       Text.hash
     );
     sessions.put(sessionId, userMap);
@@ -32,34 +30,11 @@ actor {
   public func joinSession(sessionId: SessionId, userId: UserId): async Bool {
     switch (sessions.get(sessionId)) {
       case (?session) {
-        session.put(userId, []);
+        session.put(userId, true);
         return true;
       };
       case null {
         return false;
-      };
-    }
-  };
-
-  public func updateDrawing(sessionId: SessionId, userId: UserId, drawing: DrawingData): async Bool {
-    switch (sessions.get(sessionId)) {
-      case (?session) {
-        session.put(userId, drawing);
-        return true;
-      };
-      case null {
-        return false;
-      };
-    }
-  };
-
-  public query func getDrawing(sessionId: SessionId): async ?[(UserId, DrawingData)] {
-    switch (sessions.get(sessionId)) {
-      case (?session) {
-        return ?Iter.toArray(session.entries());
-      };
-      case null {
-        return null;
       };
     }
   };

@@ -1,0 +1,28 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+  
+    p {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+  
+    nav {
+      display: flex;
+      gap: 1rem;
+  
+      a {
+        font-size: 0.9rem;
+        color: #6c757d;
+        text-decoration: none;
+  
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }  
